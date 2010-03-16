@@ -32,6 +32,8 @@ public class XmlJasperInterface {
   private String outputType;
   private String compiledDesign;
   private String selectCriteria;
+  private static String datePattern = null;
+  private static String numberPattern = null;
 
   public static void main(String[] args) {
     String outputType = null;
@@ -50,6 +52,10 @@ public class XmlJasperInterface {
         compiledDesign = args[k].substring(2);
       else if (args[k].startsWith("-x"))
         selectCriteria = args[k].substring(2);
+      else if (args[k].startsWith("-datePattern"))
+        datePattern = args[k].substring(12);
+      else if (args[k].startsWith("-numberPattern"))
+        numberPattern = args[k].substring(14);
     }
     
     XmlJasperInterface jasperInterface = new XmlJasperInterface(outputType, compiledDesign, selectCriteria);
@@ -69,7 +75,22 @@ public class XmlJasperInterface {
   
   public boolean report() {
     try {
-      JasperPrint jasperPrint = JasperFillManager.fillReport(compiledDesign, null, new JRXmlDataSource(System.in, selectCriteria));
+      JRXmlDataSource jrxmlDataSource = new JRXmlDataSource(System.in, selectCriteria);
+      if (datePattern != null){
+        jrxmlDataSource.setDatePattern(datePattern);
+      }else{
+        jrxmlDataSource.setDatePattern("yyyy-MM-dd");
+      }
+        jrxmlDataSource.setDatePattern("yyyy-MM-dd");
+      if (numberPattern != null){
+        jrxmlDataSource.setNumberPattern(numberPattern);
+      }
+
+      java.util.HashMap param = new java.util.HashMap();
+      param.put("REPORT_LOCALE", new java.util.Locale("pt","BR"));
+
+     // JasperPrint jasperPrint = JasperFillManager.fillReport(compiledDesign, null, jrxmlDataSource);
+      JasperPrint jasperPrint = JasperFillManager.fillReport(compiledDesign, param, jrxmlDataSource);
       
       if (TYPE_PDF.equals(outputType)) {
         JasperExportManager.exportReportToPdfStream(jasperPrint, System.out);
