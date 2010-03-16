@@ -1,0 +1,7 @@
+== 0.0.2 2008-3-13
+
+  * Make filename of output report configurable
+
+== 0.0.1 2008-02-12
+
+  * Initial release
