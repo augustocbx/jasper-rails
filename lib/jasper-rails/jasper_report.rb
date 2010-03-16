@@ -16,8 +16,6 @@ class JasperReport
             interface_classpath << ":#{File.dirname(__FILE__)}/../../includes/jasperreports/lib/"+file if (file != '.' and file != '..' and file.match(/.jar/))
           end
       #end
-      puts 'xxxxxxxxxxxxxxxxxxxxxxxx'
-      p interface_classpath
       
       result=nil
       IO.popen "java -Djava.awt.headless=true -cp \"#{interface_classpath}\" XmlJasperInterface -o#{opts[:format] || 'pdf'} -f#{RAILS_ROOT}/app/views/#{opts[:jasper_file]} -x#{opts[:select_criteria]}", "w+" do |pipe|
