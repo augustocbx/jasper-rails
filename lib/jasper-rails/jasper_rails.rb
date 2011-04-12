@@ -20,6 +20,7 @@ module JasperRails
         end
       end
     end
+    opts[:disposition] ||= 'inline'
     raise(RuntimeError,"#{params[:action]}.rxml not found in views") unless opts[:xml]
     opts.reverse_merge!({:jasper_file => "#{params[:controller]}/#{params[:action]}", :format => 'pdf'})
     send_data JasperReport.generate(opts), :filename => (opts[:filename] || "report.pdf"), :type => opts[:format], :disposition => opts[:disposition]
